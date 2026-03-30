@@ -1,0 +1,24 @@
+{
+  "name": "new",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klasolsson81/sexologiskterapi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/klasolsson81/sexologiskterapi/issues"
+  },
+  "homepage": "https://github.com/klasolsson81/sexologiskterapi#readme",
+  "dependencies": {
+    "playwright": "^1.58.2"
+  }
+}
