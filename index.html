@@ -251,6 +251,14 @@
               400: '#c9b799',
               500: '#b09a74',
             },
+            sage: {
+              100: '#e8ede9',
+              200: '#d1dbd3',
+              300: '#a8bfad',
+              400: '#7a9a8a',
+              500: '#5d7e6b',
+              600: '#4a6556',
+            },
             stone: {
               750: '#363230',
               850: '#2a2725',
@@ -306,7 +314,7 @@
       content: '';
       position: absolute;
       top: -12px; left: -12px; right: 12px; bottom: 12px;
-      border: 1px solid rgba(201, 183, 153, 0.3);
+      border: 1px solid rgba(122, 154, 138, 0.35);
       transition: all 0.6s ease;
     }
     .portrait-frame:hover::before { top: -8px; left: -8px; right: 8px; bottom: 8px; }
@@ -314,7 +322,7 @@
       content: '';
       position: absolute;
       top: 12px; left: 12px; right: -12px; bottom: -12px;
-      border: 1px solid rgba(201, 183, 153, 0.15);
+      border: 1px solid rgba(122, 154, 138, 0.18);
       transition: all 0.6s ease;
     }
     .portrait-frame:hover::after { top: 8px; left: 8px; right: -8px; bottom: -8px; }
@@ -359,6 +367,28 @@
     .faq-btn:hover, .faq-item.open .faq-btn {
       color: #b09a74;
     }
+
+    /* Language switcher */
+    .lang-btn {
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lang-btn.active {
+      color: #4a6556;
+      font-weight: 500;
+    }
+    .lang-btn:not(.active) { opacity: 0.45; }
+    .lang-btn:hover { opacity: 1; }
+
+    /* Language transition */
+    [data-i18n] {
+      transition: opacity 0.25s ease;
+    }
+    .lang-switching [data-i18n] {
+      opacity: 0;
+    }
   </style>
 </head>
 <body class="bg-warm-50 text-stone-800 antialiased">
@@ -369,11 +399,11 @@
   <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar" aria-label="Huvudnavigation">
     <div class="max-w-7xl mx-auto px-6 sm:px-10">
       <div class="flex items-center justify-between h-20">
-        <a href="#" class="font-serif text-2xl tracking-wide text-white transition-colors duration-500" id="nav-logo">
+        <a href="#" class="font-serif text-2xl tracking-wide text-stone-900 transition-colors duration-500" id="nav-logo">
           Mandeep Levlin Singh
         </a>
 
-        <button id="menu-toggle" class="md:hidden p-2 text-white transition-colors duration-500" aria-label="Öppna meny" aria-expanded="false" aria-controls="mobile-menu">
+        <button id="menu-toggle" class="md:hidden p-2 text-stone-900 transition-colors duration-500" aria-label="Öppna meny" aria-expanded="false" aria-controls="mobile-menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
             <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
@@ -381,21 +411,46 @@
         </button>
 
         <div class="hidden md:flex items-center space-x-10">
-          <a href="#om-mig" class="nav-link text-white/80 hover:text-white transition-colors text-sm tracking-wide font-light">Om mig</a>
-          <a href="#tjanster" class="nav-link text-white/80 hover:text-white transition-colors text-sm tracking-wide font-light">Tjänster</a>
-          <a href="#priser" class="nav-link text-white/80 hover:text-white transition-colors text-sm tracking-wide font-light">Priser</a>
-          <a href="#faq" class="nav-link text-white/80 hover:text-white transition-colors text-sm tracking-wide font-light">FAQ</a>
-          <a href="#kontakt" id="nav-cta" class="text-sm tracking-wide font-light border border-white/40 text-white px-6 py-2 hover:bg-white hover:text-stone-900 transition-all duration-300">Kontakt</a>
+          <a href="#om-mig" class="nav-link text-stone-500 hover:text-stone-800 transition-colors text-sm tracking-wide font-light" data-i18n="nav.about">Om mig</a>
+          <a href="#tjanster" class="nav-link text-stone-500 hover:text-stone-800 transition-colors text-sm tracking-wide font-light" data-i18n="nav.services">Tjänster</a>
+          <a href="#priser" class="nav-link text-stone-500 hover:text-stone-800 transition-colors text-sm tracking-wide font-light" data-i18n="nav.prices">Priser</a>
+          <a href="#faq" class="nav-link text-stone-500 hover:text-stone-800 transition-colors text-sm tracking-wide font-light">FAQ</a>
+          <a href="#kontakt" id="nav-cta" class="text-sm tracking-wide font-light border border-stone-900 text-stone-900 px-6 py-2 hover:bg-stone-900 hover:text-white transition-all duration-300" data-i18n="nav.contact">Kontakt</a>
+
+          <!-- Language switcher -->
+          <div class="flex items-center space-x-2 text-xs tracking-wide" aria-label="Välj språk">
+            <button class="lang-btn active px-2 py-1.5 rounded" data-lang="sv" aria-label="Svenska">
+              <svg width="20" height="14" viewBox="0 0 20 14" class="flex-shrink-0"><rect width="20" height="14" fill="#006AA7"/><rect x="6" width="2.5" height="14" fill="#FECC00"/><rect y="5.25" width="20" height="2.5" fill="#FECC00"/></svg>
+              Svenska
+            </button>
+            <span class="text-stone-300">|</span>
+            <button class="lang-btn px-2 py-1.5 rounded" data-lang="da" aria-label="Dansk">
+              <svg width="20" height="14" viewBox="0 0 20 14" class="flex-shrink-0"><rect width="20" height="14" fill="#C8102E"/><rect x="5.5" width="2.5" height="14" fill="#fff"/><rect y="5.25" width="20" height="2.5" fill="#fff"/></svg>
+              Dansk
+            </button>
+          </div>
         </div>
       </div>
 
       <div id="mobile-menu" class="hidden md:hidden pb-6" role="menu">
-        <div class="flex flex-col space-y-4 border-t border-white/20 pt-4" id="mobile-menu-inner">
-          <a href="#om-mig" class="mobile-link text-white/80 hover:text-white transition-colors text-sm tracking-wide font-light" role="menuitem">Om mig</a>
-          <a href="#tjanster" class="mobile-link text-white/80 hover:text-white transition-colors text-sm tracking-wide font-light" role="menuitem">Tjänster</a>
-          <a href="#priser" class="mobile-link text-white/80 hover:text-white transition-colors text-sm tracking-wide font-light" role="menuitem">Priser</a>
-          <a href="#faq" class="mobile-link text-white/80 hover:text-white transition-colors text-sm tracking-wide font-light" role="menuitem">FAQ</a>
-          <a href="#kontakt" class="mobile-link text-sm tracking-wide font-light border border-white/40 text-white px-6 py-2 hover:bg-white hover:text-stone-900 transition-all duration-300 text-center" role="menuitem">Kontakt</a>
+        <div class="flex flex-col space-y-4 border-t border-stone-200 pt-4" id="mobile-menu-inner">
+          <a href="#om-mig" class="mobile-link text-stone-600 hover:text-stone-900 transition-colors text-sm tracking-wide font-light" role="menuitem" data-i18n="nav.about">Om mig</a>
+          <a href="#tjanster" class="mobile-link text-stone-600 hover:text-stone-900 transition-colors text-sm tracking-wide font-light" role="menuitem" data-i18n="nav.services">Tjänster</a>
+          <a href="#priser" class="mobile-link text-stone-600 hover:text-stone-900 transition-colors text-sm tracking-wide font-light" role="menuitem" data-i18n="nav.prices">Priser</a>
+          <a href="#faq" class="mobile-link text-stone-600 hover:text-stone-900 transition-colors text-sm tracking-wide font-light" role="menuitem">FAQ</a>
+          <a href="#kontakt" class="mobile-link text-sm tracking-wide font-light border border-stone-900 text-stone-900 px-6 py-2 hover:bg-stone-900 hover:text-white transition-all duration-300 text-center" role="menuitem" data-i18n="nav.contact">Kontakt</a>
+          <!-- Mobile language switcher -->
+          <div class="flex items-center space-x-3 text-xs tracking-wide pt-2" aria-label="Välj språk">
+            <button class="lang-btn active px-3 py-2 rounded" data-lang="sv" aria-label="Svenska">
+              <svg width="20" height="14" viewBox="0 0 20 14" class="flex-shrink-0"><rect width="20" height="14" fill="#006AA7"/><rect x="6" width="2.5" height="14" fill="#FECC00"/><rect y="5.25" width="20" height="2.5" fill="#FECC00"/></svg>
+              Svenska
+            </button>
+            <span class="text-stone-300">|</span>
+            <button class="lang-btn px-3 py-2 rounded" data-lang="da" aria-label="Dansk">
+              <svg width="20" height="14" viewBox="0 0 20 14" class="flex-shrink-0"><rect width="20" height="14" fill="#C8102E"/><rect x="5.5" width="2.5" height="14" fill="#fff"/><rect y="5.25" width="20" height="2.5" fill="#fff"/></svg>
+              Dansk
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -406,35 +461,35 @@
   <!-- ============================================ -->
   <!-- HERO                                          -->
   <!-- ============================================ -->
-  <header class="relative min-h-screen bg-stone-950 text-white flex items-center overflow-hidden">
+  <header class="relative min-h-[85vh] flex items-center overflow-hidden" style="background: linear-gradient(135deg, #f5f0eb 0%, #e8ede9 50%, #f0ebe3 100%);">
     <div class="absolute inset-0">
-      <img src="images/nature.jpg" alt="" class="w-full h-full object-cover opacity-15 scale-110" id="hero-bg" aria-hidden="true">
-      <div class="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-950/85 to-stone-950/50"></div>
+      <img src="images/nature.jpg" alt="" class="w-full h-full object-cover opacity-30 scale-110" id="hero-bg" aria-hidden="true">
+      <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-warm-50/90 to-warm-100/70"></div>
     </div>
 
     <div class="relative max-w-7xl mx-auto px-6 sm:px-10 w-full py-32">
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
 
         <div class="order-2 lg:order-1">
-          <p class="hero-fade text-warm-400 text-sm tracking-[0.25em] uppercase mb-8 font-light opacity-0">
+          <p class="hero-fade text-stone-500 text-sm tracking-[0.25em] uppercase mb-8 font-medium opacity-0" data-i18n="hero.subtitle">
             Psykolog &middot; Sexolog &middot; Familjeterapeut
           </p>
 
-          <h1 id="hero-title" class="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] leading-[1.08] mb-8 text-white font-light">
+          <h1 id="hero-title" class="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] leading-[1.08] mb-8 text-stone-900 font-light" data-i18n="hero.title">
             Psykologisk och sexologisk behandling i Malmö
           </h1>
 
-          <div class="separator hero-fade opacity-0 mb-8"></div>
+          <div class="separator hero-fade opacity-0 mb-8" style="background: #7a9a8a;"></div>
 
-          <p class="hero-fade opacity-0 font-serif italic text-2xl sm:text-3xl text-warm-300 mb-6 font-light">
+          <p class="hero-fade opacity-0 font-serif italic text-2xl sm:text-3xl text-stone-600 mb-6" data-i18n="hero.tagline">
             Tillsammans skapar vi förändring
           </p>
 
-          <p class="hero-fade opacity-0 text-white/60 leading-relaxed text-base max-w-lg mb-12 font-light">
+          <p class="hero-fade opacity-0 text-stone-500 leading-relaxed text-base max-w-lg mb-12" data-i18n="hero.description">
             Jag erbjuder behandling för ungdomar, vuxna, par och familjer som söker professionellt stöd för psykisk hälsa, relationer och sexuell hälsa.
           </p>
 
-          <a href="#kontakt" class="hero-fade opacity-0 inline-block border border-warm-400/60 text-warm-300 px-12 py-4 text-sm tracking-[0.2em] uppercase font-light hover:bg-warm-400 hover:text-stone-900 hover:border-warm-400">
+          <a href="#kontakt" class="hero-fade opacity-0 inline-block border-2 border-stone-800 text-stone-800 px-12 py-4 text-sm tracking-[0.2em] uppercase font-medium hover:bg-stone-800 hover:text-white transition-all duration-300" data-i18n="hero.cta">
             Boka tid
           </a>
         </div>
@@ -457,8 +512,8 @@
     </div>
 
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0" id="scroll-indicator" aria-hidden="true">
-      <span class="text-white/30 text-xs tracking-[0.2em] uppercase font-light">Scrolla</span>
-      <div class="w-px h-12 bg-gradient-to-b from-warm-400/50 to-transparent"></div>
+      <span class="text-stone-400 text-xs tracking-[0.2em] uppercase font-light" data-i18n="hero.scroll">Scrolla</span>
+      <div class="w-px h-12 bg-gradient-to-b from-sage-400/50 to-transparent"></div>
     </div>
   </header>
 
@@ -472,22 +527,22 @@
           <img src="images/nature.jpg" alt="Stilla bergssjö – symboliserar lugn och psykisk balans" class="w-full h-72 sm:h-80 lg:h-[28rem] object-cover about-img" loading="lazy" width="700" height="450">
         </div>
         <div>
-          <p class="text-warm-500 text-sm tracking-[0.25em] uppercase mb-4 font-light about-reveal">Om mig</p>
-          <h2 id="om-mig-heading" class="font-serif text-3xl sm:text-4xl text-stone-900 mb-4 font-light about-reveal">
+          <p class="text-warm-500 text-sm tracking-[0.25em] uppercase mb-4 font-light about-reveal" data-i18n="about.label">Om mig</p>
+          <h2 id="om-mig-heading" class="font-serif text-3xl sm:text-4xl text-stone-900 mb-4 font-light about-reveal" data-i18n="about.title">
             Psykolog i Malmö
           </h2>
           <div class="separator mb-8 about-reveal"></div>
           <div class="space-y-5 text-stone-600 leading-relaxed font-light">
-            <p class="about-reveal">
+            <p class="about-reveal" data-i18n="about.p1">
               Jag är utbildad cand. mag. (master) i psykologi och familjeterapeut från Danmark, samt under utbildning som sexolog och parterapeut. Med över 10 års erfarenhet inom neuropsykiatri, relationsarbete och psykisk hälsa arbetar jag evidensbaserat och helhetsorienterat.
             </p>
-            <p class="about-reveal">
+            <p class="about-reveal" data-i18n="about.p2">
               Behandlingen anpassas alltid individuellt utifrån dina behov, din livssituation och dina mål. I min privata mottagning i Malmö möts du av trygghet, respekt och ett tydligt fokus på hållbar förändring.
             </p>
-            <p class="about-reveal">
+            <p class="about-reveal" data-i18n="about.p3">
               Mitt mål är att stödja dig i att uppnå bättre psykiskt välbefinnande och hållbara relationer, både till dig själv och till andra.
             </p>
-            <p class="font-serif italic text-lg text-stone-800 pt-2 about-reveal font-light">
+            <p class="font-serif italic text-lg text-stone-800 pt-2 about-reveal font-light" data-i18n="about.welcome">
               Välkommen att ta det första steget mot förändring.
             </p>
           </div>
@@ -509,17 +564,17 @@
       </div>
       <div class="relative max-w-4xl mx-auto px-6 sm:px-10">
         <div class="max-w-2xl">
-          <p class="text-warm-400 text-sm tracking-[0.25em] uppercase mb-4 font-light service-text">Tjänster</p>
-          <h2 class="font-serif text-3xl sm:text-4xl text-white mb-4 font-light service-text">Neuropsykiatri &amp; ADHD</h2>
+          <p class="text-warm-400 text-sm tracking-[0.25em] uppercase mb-4 font-light service-text" data-i18n="services.label">Tjänster</p>
+          <h2 class="font-serif text-3xl sm:text-4xl text-white mb-4 font-light service-text" data-i18n="services.npf.title">Neuropsykiatri &amp; ADHD</h2>
           <div class="separator mb-8 service-text"></div>
-          <p class="text-white/70 leading-relaxed font-light mb-8 service-text">Behöver du stöd vid ADHD, autism (AST) eller ångest? Jag erbjuder individanpassat stöd och behandling med lång erfarenhet inom neuropsykiatri i Malmö.</p>
+          <p class="text-white/70 leading-relaxed font-light mb-8 service-text" data-i18n="services.npf.desc">Behöver du stöd vid ADHD, autism (AST) eller ångest? Jag erbjuder individanpassat stöd och behandling med lång erfarenhet inom neuropsykiatri i Malmö.</p>
           <ul class="space-y-3 text-white/70 font-light">
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>ADHD hos ungdomar och vuxna</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Autism/AST och sociala svårigheter</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Känsloreglering och stress</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Skol- och arbetsrelaterade svårigheter</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Struktur och planering i vardagen</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Föräldrastöd och familjestöd vid NPF</li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.npf.item1">ADHD hos ungdomar och vuxna</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.npf.item2">Autism/AST och sociala svårigheter</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.npf.item3">Känsloreglering och stress</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.npf.item4">Skol- och arbetsrelaterade svårigheter</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.npf.item5">Struktur och planering i vardagen</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.npf.item6">Föräldrastöd och familjestöd vid NPF</span></li>
           </ul>
         </div>
       </div>
@@ -533,14 +588,14 @@
             <img src="images/plant.png" alt="Varm och trygg terapimiljö med växter – individuell terapi i Malmö" class="w-full h-72 sm:h-80 lg:h-[28rem] object-cover" loading="lazy" width="600" height="400">
           </div>
           <div class="service-text order-1 lg:order-2">
-            <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 mb-4 font-light">Individuell terapi</h2>
+            <h2 class="font-serif text-3xl sm:text-4xl text-stone-900 mb-4 font-light" data-i18n="services.individual.title">Individuell terapi</h2>
             <div class="separator mb-8"></div>
-            <p class="text-stone-600 leading-relaxed font-light mb-8">Jag erbjuder individuell terapi för vuxna som upplever psykiska, emotionella eller relationella utmaningar.</p>
+            <p class="text-stone-600 leading-relaxed font-light mb-8" data-i18n="services.individual.desc">Jag erbjuder individuell terapi för vuxna som upplever psykiska, emotionella eller relationella utmaningar.</p>
             <ul class="space-y-3 text-stone-600 font-light">
-              <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Ångest, inre oro och stressreaktioner</li>
-              <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Låg självkänsla och osäkerhet</li>
-              <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Relations- och sociala utmaningar</li>
-              <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Identitet, livsval och personliga gränser</li>
+              <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.individual.item1">Ångest, inre oro och stressreaktioner</span></li>
+              <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.individual.item2">Låg självkänsla och osäkerhet</span></li>
+              <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.individual.item3">Relations- och sociala utmaningar</span></li>
+              <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.individual.item4">Identitet, livsval och personliga gränser</span></li>
             </ul>
           </div>
         </div>
@@ -555,16 +610,16 @@
       </div>
       <div class="relative max-w-4xl mx-auto px-6 sm:px-10">
         <div class="max-w-2xl lg:ml-auto">
-          <h2 class="font-serif text-3xl sm:text-4xl text-white mb-4 font-light service-text">Parterapi &amp; sexologisk rådgivning</h2>
+          <h2 class="font-serif text-3xl sm:text-4xl text-white mb-4 font-light service-text" data-i18n="services.couples.title">Parterapi &amp; sexologisk rådgivning</h2>
           <div class="separator mb-8 service-text"></div>
-          <p class="text-white/70 leading-relaxed font-light mb-8 service-text">Jag erbjuder parterapi och individuell sexologisk rådgivning i Malmö för personer och par som upplever utmaningar kring sexualitet, intimitet, identitet och relationer.</p>
+          <p class="text-white/70 leading-relaxed font-light mb-8 service-text" data-i18n="services.couples.desc">Jag erbjuder parterapi och individuell sexologisk rådgivning i Malmö för personer och par som upplever utmaningar kring sexualitet, intimitet, identitet och relationer.</p>
           <ul class="space-y-3 text-white/70 font-light">
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Bristande eller olika sexuell lust</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Osäkerhet, skam eller obehag kring sexualitet</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Kommunikation om gränser och samtycke</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Sexualitet kopplad till ADHD/autism</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Stöd för HBTQ+-personer</li>
-            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>Identitet, sexualitet och relationer</li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.couples.item1">Bristande eller olika sexuell lust</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.couples.item2">Osäkerhet, skam eller obehag kring sexualitet</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.couples.item3">Kommunikation om gränser och samtycke</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.couples.item4">Sexualitet kopplad till ADHD/autism</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.couples.item5">Stöd för HBTQ+-personer</span></li>
+            <li class="flex items-start service-item"><span class="w-1.5 h-1.5 bg-warm-400 rounded-full mt-2 mr-3 flex-shrink-0"></span><span data-i18n="services.couples.item6">Identitet, sexualitet och relationer</span></li>
           </ul>
         </div>
       </div>
@@ -580,11 +635,11 @@
     </div>
     <div class="absolute inset-0 bg-stone-950/90"></div>
     <div class="relative max-w-4xl mx-auto px-6 sm:px-10 text-center">
-      <p class="quote-text text-4xl sm:text-5xl lg:text-6xl text-warm-200 font-light italic" id="quote-text">
+      <p class="quote-text text-4xl sm:text-5xl lg:text-6xl text-warm-200 font-light italic" id="quote-text" data-i18n="quote.text">
         Allas sexualitet &mdash; utan tabu.
       </p>
       <div class="separator mx-auto mt-10 mb-10 quote-reveal"></div>
-      <p class="text-white/50 font-light leading-relaxed max-w-2xl mx-auto quote-reveal">
+      <p class="text-white/50 font-light leading-relaxed max-w-2xl mx-auto quote-reveal" data-i18n="quote.desc">
         En sexolog är en professionell som hjälper människor att hantera sexuella utmaningar och skapa ett hälsosamt och tillfredsställande sexliv. Samtalen sker i trygghet, utan fördomar och med respekt för din identitet.
       </p>
     </div>
@@ -596,46 +651,46 @@
   <section id="priser" class="py-16 sm:py-20 bg-warm-50 overflow-hidden" aria-labelledby="priser-heading">
     <div class="max-w-3xl mx-auto px-6 sm:px-10">
       <div class="text-center mb-16">
-        <p class="text-warm-500 text-sm tracking-[0.25em] uppercase mb-4 font-light price-reveal">Priser</p>
-        <h2 id="priser-heading" class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5 font-light price-reveal">Priser</h2>
+        <p class="text-warm-500 text-sm tracking-[0.25em] uppercase mb-4 font-light price-reveal" data-i18n="prices.label">Priser</p>
+        <h2 id="priser-heading" class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5 font-light price-reveal" data-i18n="prices.title">Priser</h2>
         <div class="separator mx-auto price-reveal"></div>
       </div>
 
       <div class="space-y-0" role="table" aria-label="Prislista för terapi">
         <div class="grid grid-cols-3 text-xs tracking-[0.15em] uppercase text-stone-400 font-medium pb-4 border-b border-warm-300 price-reveal" role="row">
-          <span role="columnheader">Tjänst</span>
-          <span class="text-center" role="columnheader">Tid</span>
-          <span class="text-right" role="columnheader">Pris</span>
+          <span role="columnheader" data-i18n="prices.col.service">Tjänst</span>
+          <span class="text-center" role="columnheader" data-i18n="prices.col.time">Tid</span>
+          <span class="text-right" role="columnheader" data-i18n="prices.col.price">Pris</span>
         </div>
 
         <div class="price-row grid grid-cols-3 py-6 border-b border-warm-200 items-center cursor-default" role="row">
-          <span class="text-stone-700 font-light text-sm sm:text-base" role="cell">Individuell terapi / konsultation</span>
+          <span class="text-stone-700 font-light text-sm sm:text-base" role="cell" data-i18n="prices.row1.name">Individuell terapi / konsultation</span>
           <span class="text-stone-400 text-center text-sm font-light" role="cell">60 min</span>
           <span class="text-stone-900 text-right font-medium counter" role="cell">1 250 kr</span>
         </div>
         <div class="price-row grid grid-cols-3 py-6 border-b border-warm-200 items-center cursor-default" role="row">
-          <span class="text-stone-700 font-light text-sm sm:text-base" role="cell">Parterapi</span>
+          <span class="text-stone-700 font-light text-sm sm:text-base" role="cell" data-i18n="prices.row2.name">Parterapi</span>
           <span class="text-stone-400 text-center text-sm font-light" role="cell">75 min</span>
           <span class="text-stone-900 text-right font-medium counter" role="cell">1 550 kr</span>
         </div>
         <div class="price-row grid grid-cols-3 py-6 border-b border-warm-200 items-center cursor-default" role="row">
-          <span class="text-stone-700 font-light text-sm sm:text-base" role="cell">Familjeterapi</span>
+          <span class="text-stone-700 font-light text-sm sm:text-base" role="cell" data-i18n="prices.row3.name">Familjeterapi</span>
           <span class="text-stone-400 text-center text-sm font-light" role="cell">75 min</span>
           <span class="text-stone-900 text-right font-medium counter" role="cell">1 550 kr</span>
         </div>
         <div class="price-row grid grid-cols-3 py-6 border-b border-warm-200 items-center cursor-default" role="row">
-          <span class="text-stone-700 font-light text-sm sm:text-base" role="cell">Sexologisk rådgivning</span>
+          <span class="text-stone-700 font-light text-sm sm:text-base" role="cell" data-i18n="prices.row4.name">Sexologisk rådgivning</span>
           <span class="text-stone-400 text-center text-sm font-light" role="cell">60 min</span>
           <span class="text-stone-900 text-right font-medium counter" role="cell">1 250 kr</span>
         </div>
         <div class="price-row grid grid-cols-3 py-6 border-b border-warm-200 items-center cursor-default" role="row">
-          <span class="text-warm-500 font-light text-sm sm:text-base" role="cell">Studentpris</span>
+          <span class="text-warm-500 font-light text-sm sm:text-base" role="cell" data-i18n="prices.row5.name">Studentpris</span>
           <span class="text-stone-400 text-center text-sm font-light" role="cell">60 min</span>
           <span class="text-warm-500 text-right font-medium counter" role="cell">450 kr</span>
         </div>
       </div>
 
-      <p class="text-stone-400 text-sm mt-10 text-center font-light italic price-reveal">
+      <p class="text-stone-400 text-sm mt-10 text-center font-light italic price-reveal" data-i18n="prices.cancellation">
         Avbokning ska ske senast 24 timmar före bokad tid. Vid sen avbokning debiteras full kostnad.
       </p>
     </div>
@@ -647,8 +702,8 @@
   <section id="faq" class="py-16 sm:py-20 bg-white overflow-hidden" aria-labelledby="faq-heading">
     <div class="max-w-3xl mx-auto px-6 sm:px-10">
       <div class="text-center mb-16">
-        <p class="text-warm-500 text-sm tracking-[0.25em] uppercase mb-4 font-light faq-reveal">Vanliga frågor</p>
-        <h2 id="faq-heading" class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5 font-light faq-reveal">Frågor &amp; svar</h2>
+        <p class="text-warm-500 text-sm tracking-[0.25em] uppercase mb-4 font-light faq-reveal" data-i18n="faq.label">Vanliga frågor</p>
+        <h2 id="faq-heading" class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5 font-light faq-reveal" data-i18n="faq.title">Frågor &amp; svar</h2>
         <div class="separator mx-auto faq-reveal"></div>
       </div>
 
@@ -656,11 +711,11 @@
 
         <div class="faq-item border-b border-warm-200 faq-reveal">
           <button class="faq-btn w-full flex items-center justify-between py-6 text-left text-stone-800 font-light text-base sm:text-lg" aria-expanded="false">
-            <span>Vad kostar det att gå till psykolog i Malmö?</span>
+            <span data-i18n="faq.q1">Vad kostar det att gå till psykolog i Malmö?</span>
             <span class="faq-icon text-warm-400 text-2xl leading-none ml-4 flex-shrink-0">+</span>
           </button>
           <div class="faq-answer">
-            <p class="pb-6 text-stone-500 font-light leading-relaxed">
+            <p class="pb-6 text-stone-500 font-light leading-relaxed" data-i18n="faq.a1">
               Individuell terapi kostar 1 250 kr per 60-minuterssession. Parterapi och familjeterapi kostar 1 550 kr per 75-minuterssession. Studenter erbjuds ett reducerat pris på 450 kr per session.
             </p>
           </div>
@@ -668,11 +723,11 @@
 
         <div class="faq-item border-b border-warm-200 faq-reveal">
           <button class="faq-btn w-full flex items-center justify-between py-6 text-left text-stone-800 font-light text-base sm:text-lg" aria-expanded="false">
-            <span>Vad gör en sexolog?</span>
+            <span data-i18n="faq.q2">Vad gör en sexolog?</span>
             <span class="faq-icon text-warm-400 text-2xl leading-none ml-4 flex-shrink-0">+</span>
           </button>
           <div class="faq-answer">
-            <p class="pb-6 text-stone-500 font-light leading-relaxed">
+            <p class="pb-6 text-stone-500 font-light leading-relaxed" data-i18n="faq.a2">
               En sexolog hjälper personer och par med frågor kring sexualitet, lust, intimitet, identitet och relationer. Det kan handla om bristande sexuell lust, osäkerhet kring sexualitet, kommunikation om gränser, eller sexuella utmaningar kopplade till ADHD eller autism.
             </p>
           </div>
@@ -680,11 +735,11 @@
 
         <div class="faq-item border-b border-warm-200 faq-reveal">
           <button class="faq-btn w-full flex items-center justify-between py-6 text-left text-stone-800 font-light text-base sm:text-lg" aria-expanded="false">
-            <span>Behöver man remiss för att gå till psykolog?</span>
+            <span data-i18n="faq.q3">Behöver man remiss för att gå till psykolog?</span>
             <span class="faq-icon text-warm-400 text-2xl leading-none ml-4 flex-shrink-0">+</span>
           </button>
           <div class="faq-answer">
-            <p class="pb-6 text-stone-500 font-light leading-relaxed">
+            <p class="pb-6 text-stone-500 font-light leading-relaxed" data-i18n="faq.a3">
               Nej, du behöver ingen remiss för att boka tid hos en privatpraktiserande psykolog. Du kan kontakta mottagningen direkt via telefon, e-post eller kontaktformuläret här på hemsidan.
             </p>
           </div>
@@ -692,11 +747,11 @@
 
         <div class="faq-item border-b border-warm-200 faq-reveal">
           <button class="faq-btn w-full flex items-center justify-between py-6 text-left text-stone-800 font-light text-base sm:text-lg" aria-expanded="false">
-            <span>Hur fungerar parterapi?</span>
+            <span data-i18n="faq.q4">Hur fungerar parterapi?</span>
             <span class="faq-icon text-warm-400 text-2xl leading-none ml-4 flex-shrink-0">+</span>
           </button>
           <div class="faq-answer">
-            <p class="pb-6 text-stone-500 font-light leading-relaxed">
+            <p class="pb-6 text-stone-500 font-light leading-relaxed" data-i18n="faq.a4">
               I parterapi träffas ni som par tillsammans med terapeuten för att arbeta med kommunikation, konflikter, intimitet eller andra relationsutmaningar. Sessionerna är 75 minuter och anpassas efter era behov och mål.
             </p>
           </div>
@@ -704,11 +759,11 @@
 
         <div class="faq-item border-b border-warm-200 faq-reveal">
           <button class="faq-btn w-full flex items-center justify-between py-6 text-left text-stone-800 font-light text-base sm:text-lg" aria-expanded="false">
-            <span>Kan man gå till psykolog för ADHD?</span>
+            <span data-i18n="faq.q5">Kan man gå till psykolog för ADHD?</span>
             <span class="faq-icon text-warm-400 text-2xl leading-none ml-4 flex-shrink-0">+</span>
           </button>
           <div class="faq-answer">
-            <p class="pb-6 text-stone-500 font-light leading-relaxed">
+            <p class="pb-6 text-stone-500 font-light leading-relaxed" data-i18n="faq.a5">
               Ja, Mandeep har över 10 års erfarenhet av neuropsykiatriska utmaningar som ADHD och autism. Stödet inkluderar känsloreglering, struktur i vardagen, arbetsrelaterade svårigheter och föräldrastöd vid NPF.
             </p>
           </div>
@@ -716,11 +771,11 @@
 
         <div class="faq-item border-b border-warm-200 faq-reveal">
           <button class="faq-btn w-full flex items-center justify-between py-6 text-left text-stone-800 font-light text-base sm:text-lg" aria-expanded="false">
-            <span>Vad är skillnaden mellan psykolog och psykoterapeut?</span>
+            <span data-i18n="faq.q6">Vad är skillnaden mellan psykolog och psykoterapeut?</span>
             <span class="faq-icon text-warm-400 text-2xl leading-none ml-4 flex-shrink-0">+</span>
           </button>
           <div class="faq-answer">
-            <p class="pb-6 text-stone-500 font-light leading-relaxed">
+            <p class="pb-6 text-stone-500 font-light leading-relaxed" data-i18n="faq.a6">
               En psykolog har en akademisk examen i psykologi medan en psykoterapeut har en specifik psykoterapiutbildning. Mandeep har en master i psykologi samt utbildning som familjeterapeut och sexolog.
             </p>
           </div>
@@ -728,11 +783,11 @@
 
         <div class="faq-item border-b border-warm-200 faq-reveal">
           <button class="faq-btn w-full flex items-center justify-between py-6 text-left text-stone-800 font-light text-base sm:text-lg" aria-expanded="false">
-            <span>Erbjuder ni studentpris för terapi?</span>
+            <span data-i18n="faq.q7">Erbjuder ni studentpris för terapi?</span>
             <span class="faq-icon text-warm-400 text-2xl leading-none ml-4 flex-shrink-0">+</span>
           </button>
           <div class="faq-answer">
-            <p class="pb-6 text-stone-500 font-light leading-relaxed">
+            <p class="pb-6 text-stone-500 font-light leading-relaxed" data-i18n="faq.a7">
               Ja, studenter erbjuds ett reducerat pris på 450 kr per 60-minuterssession, jämfört med ordinarie pris på 1 250 kr.
             </p>
           </div>
@@ -740,11 +795,11 @@
 
         <div class="faq-item border-b border-warm-200 faq-reveal">
           <button class="faq-btn w-full flex items-center justify-between py-6 text-left text-stone-800 font-light text-base sm:text-lg" aria-expanded="false">
-            <span>Hur lång tid tar en terapisession?</span>
+            <span data-i18n="faq.q8">Hur lång tid tar en terapisession?</span>
             <span class="faq-icon text-warm-400 text-2xl leading-none ml-4 flex-shrink-0">+</span>
           </button>
           <div class="faq-answer">
-            <p class="pb-6 text-stone-500 font-light leading-relaxed">
+            <p class="pb-6 text-stone-500 font-light leading-relaxed" data-i18n="faq.a8">
               Individuell terapi och sexologisk rådgivning är 60 minuter. Parterapi och familjeterapi är 75 minuter. Hur många sessioner som behövs varierar beroende på dina behov och mål.
             </p>
           </div>
@@ -760,10 +815,10 @@
   <section id="kontakt" class="py-16 sm:py-20 bg-warm-50 overflow-hidden" aria-labelledby="kontakt-heading">
     <div class="max-w-6xl mx-auto px-6 sm:px-10">
       <div class="text-center mb-20">
-        <p class="text-warm-500 text-sm tracking-[0.25em] uppercase mb-4 font-light contact-reveal">Kontakt</p>
-        <h2 id="kontakt-heading" class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5 font-light contact-reveal">Kontakt</h2>
+        <p class="text-warm-500 text-sm tracking-[0.25em] uppercase mb-4 font-light contact-reveal" data-i18n="contact.label">Kontakt</p>
+        <h2 id="kontakt-heading" class="font-serif text-4xl sm:text-5xl text-stone-900 mb-5 font-light contact-reveal" data-i18n="contact.title">Kontakt</h2>
         <div class="separator mx-auto mb-6 contact-reveal"></div>
-        <p class="text-stone-500 font-light contact-reveal">Välkommen att höra av dig för att boka tid eller ställa frågor</p>
+        <p class="text-stone-500 font-light contact-reveal" data-i18n="contact.subtitle">Välkommen att höra av dig för att boka tid eller ställa frågor</p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-16 lg:gap-20">
@@ -772,21 +827,21 @@
             <div class="flex items-start space-x-6">
               <div class="w-px h-14 bg-warm-300 mt-1 flex-shrink-0"></div>
               <div>
-                <p class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-1.5">Adress</p>
+                <p class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-1.5" data-i18n="contact.address.label">Adress</p>
                 <p class="text-stone-700 font-light">Spångatan 20, Malmö</p>
               </div>
             </div>
             <div class="flex items-start space-x-6">
               <div class="w-px h-14 bg-warm-300 mt-1 flex-shrink-0"></div>
               <div>
-                <p class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-1.5">E-post</p>
+                <p class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-1.5" data-i18n="contact.email.label">E-post</p>
                 <a href="mailto:ms.aktivterapi@gmail.com" class="text-stone-700 font-light hover:text-warm-500 transition-colors">ms.aktivterapi@gmail.com</a>
               </div>
             </div>
             <div class="flex items-start space-x-6">
               <div class="w-px h-14 bg-warm-300 mt-1 flex-shrink-0"></div>
               <div>
-                <p class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-1.5">Telefon</p>
+                <p class="text-xs tracking-[0.15em] uppercase text-stone-400 mb-1.5" data-i18n="contact.phone.label">Telefon</p>
                 <a href="tel:+46761668345" class="text-stone-700 font-light hover:text-warm-500 transition-colors">+46 (0)761 668 345</a>
               </div>
             </div>
@@ -811,28 +866,28 @@
 
             <div class="space-y-8">
               <div class="form-field">
-                <label for="name" class="block text-xs tracking-[0.15em] uppercase text-stone-400 mb-3">Namn</label>
+                <label for="name" class="block text-xs tracking-[0.15em] uppercase text-stone-400 mb-3" data-i18n="contact.form.name">Namn</label>
                 <input type="text" id="name" name="name" required autocomplete="name"
                   class="w-full px-0 py-3 bg-transparent border-0 border-b border-warm-300 focus:border-stone-900 outline-none transition-colors text-stone-700 font-light placeholder:text-stone-300"
-                  placeholder="Ditt namn">
+                  placeholder="Ditt namn" data-i18n-placeholder="contact.form.name_placeholder">
               </div>
 
               <div class="form-field">
-                <label for="email" class="block text-xs tracking-[0.15em] uppercase text-stone-400 mb-3">E-post</label>
+                <label for="email" class="block text-xs tracking-[0.15em] uppercase text-stone-400 mb-3" data-i18n="contact.form.email">E-post</label>
                 <input type="email" id="email" name="email" required autocomplete="email"
                   class="w-full px-0 py-3 bg-transparent border-0 border-b border-warm-300 focus:border-stone-900 outline-none transition-colors text-stone-700 font-light placeholder:text-stone-300"
-                  placeholder="din@epost.se">
+                  placeholder="din@epost.se" data-i18n-placeholder="contact.form.email_placeholder">
               </div>
 
               <div class="form-field">
-                <label for="message" class="block text-xs tracking-[0.15em] uppercase text-stone-400 mb-3">Meddelande</label>
+                <label for="message" class="block text-xs tracking-[0.15em] uppercase text-stone-400 mb-3" data-i18n="contact.form.message">Meddelande</label>
                 <textarea id="message" name="message" rows="5" required
                   class="w-full px-0 py-3 bg-transparent border-0 border-b border-warm-300 focus:border-stone-900 outline-none transition-colors text-stone-700 font-light placeholder:text-stone-300 resize-none"
-                  placeholder="Beskriv kort vad du söker hjälp med..."></textarea>
+                  placeholder="Beskriv kort vad du söker hjälp med..." data-i18n-placeholder="contact.form.message_placeholder"></textarea>
               </div>
 
               <button type="submit"
-                class="w-full border border-stone-900 text-stone-900 py-4 text-sm tracking-[0.2em] uppercase font-light hover:bg-stone-900 hover:text-white mt-4">
+                class="w-full border border-stone-900 text-stone-900 py-4 text-sm tracking-[0.2em] uppercase font-light hover:bg-stone-900 hover:text-white mt-4" data-i18n="contact.form.submit">
                 Skicka meddelande
               </button>
             </div>
@@ -849,8 +904,8 @@
   <!-- ============================================ -->
   <footer class="bg-stone-950 text-white/50 py-12">
     <div class="max-w-6xl mx-auto px-6 sm:px-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs tracking-wide font-light">
-      <p>&copy; 2026 Mandeep Levlin Singh &mdash; Master i psykologi och familjeterapeut</p>
-      <a href="integritetspolicy.html" class="text-white/30 hover:text-white/60 transition-colors">Integritetspolicy</a>
+      <p data-i18n="footer.copy">&copy; 2026 Mandeep Levlin Singh &mdash; Master i psykologi och familjeterapeut</p>
+      <a href="integritetspolicy.html" class="text-white/30 hover:text-white/60 transition-colors" data-i18n="footer.privacy">Integritetspolicy</a>
     </div>
   </footer>
 
@@ -861,6 +916,299 @@
   // Always start from the top on page load/refresh
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
+
+  // ══════════════════════════════════════════════
+  // TRANSLATIONS
+  // ══════════════════════════════════════════════
+  var translations = {
+    sv: {
+      // Meta
+      'meta.title': 'Psykolog & Sexolog i Malmö – Mandeep Levlin Singh',
+      'meta.description': 'Psykolog i Malmö med fokus på ADHD, ångest, parterapi och sexologisk rådgivning. Individuell terapi, familjeterapi och studentpris. Boka tid idag.',
+
+      // Nav
+      'nav.about': 'Om mig',
+      'nav.services': 'Tjänster',
+      'nav.prices': 'Priser',
+      'nav.contact': 'Kontakt',
+
+      // Hero
+      'hero.subtitle': 'Psykolog \u00b7 Sexolog \u00b7 Familjeterapeut',
+      'hero.title': 'Psykologisk och sexologisk behandling i Malmö',
+      'hero.tagline': 'Tillsammans skapar vi förändring',
+      'hero.description': 'Jag erbjuder behandling för ungdomar, vuxna, par och familjer som söker professionellt stöd för psykisk hälsa, relationer och sexuell hälsa.',
+      'hero.cta': 'Boka tid',
+      'hero.scroll': 'Scrolla',
+
+      // About
+      'about.label': 'Om mig',
+      'about.title': 'Psykolog i Malmö',
+      'about.p1': 'Jag är utbildad cand. mag. (master) i psykologi och familjeterapeut från Danmark, samt under utbildning som sexolog och parterapeut. Med över 10 års erfarenhet inom neuropsykiatri, relationsarbete och psykisk hälsa arbetar jag evidensbaserat och helhetsorienterat.',
+      'about.p2': 'Behandlingen anpassas alltid individuellt utifrån dina behov, din livssituation och dina mål. I min privata mottagning i Malmö möts du av trygghet, respekt och ett tydligt fokus på hållbar förändring.',
+      'about.p3': 'Mitt mål är att stödja dig i att uppnå bättre psykiskt välbefinnande och hållbara relationer, både till dig själv och till andra.',
+      'about.welcome': 'Välkommen att ta det första steget mot förändring.',
+
+      // Services
+      'services.label': 'Tjänster',
+      'services.npf.title': 'Neuropsykiatri & ADHD',
+      'services.npf.desc': 'Behöver du stöd vid ADHD, autism (AST) eller ångest? Jag erbjuder individanpassat stöd och behandling med lång erfarenhet inom neuropsykiatri i Malmö.',
+      'services.npf.item1': 'ADHD hos ungdomar och vuxna',
+      'services.npf.item2': 'Autism/AST och sociala svårigheter',
+      'services.npf.item3': 'Känsloreglering och stress',
+      'services.npf.item4': 'Skol- och arbetsrelaterade svårigheter',
+      'services.npf.item5': 'Struktur och planering i vardagen',
+      'services.npf.item6': 'Föräldrastöd och familjestöd vid NPF',
+      'services.individual.title': 'Individuell terapi',
+      'services.individual.desc': 'Jag erbjuder individuell terapi för vuxna som upplever psykiska, emotionella eller relationella utmaningar.',
+      'services.individual.item1': 'Ångest, inre oro och stressreaktioner',
+      'services.individual.item2': 'Låg självkänsla och osäkerhet',
+      'services.individual.item3': 'Relations- och sociala utmaningar',
+      'services.individual.item4': 'Identitet, livsval och personliga gränser',
+      'services.couples.title': 'Parterapi & sexologisk rådgivning',
+      'services.couples.desc': 'Jag erbjuder parterapi och individuell sexologisk rådgivning i Malmö för personer och par som upplever utmaningar kring sexualitet, intimitet, identitet och relationer.',
+      'services.couples.item1': 'Bristande eller olika sexuell lust',
+      'services.couples.item2': 'Osäkerhet, skam eller obehag kring sexualitet',
+      'services.couples.item3': 'Kommunikation om gränser och samtycke',
+      'services.couples.item4': 'Sexualitet kopplad till ADHD/autism',
+      'services.couples.item5': 'Stöd för HBTQ+-personer',
+      'services.couples.item6': 'Identitet, sexualitet och relationer',
+
+      // Quote
+      'quote.text': 'Allas sexualitet \u2014 utan tabu.',
+      'quote.desc': 'En sexolog är en professionell som hjälper människor att hantera sexuella utmaningar och skapa ett hälsosamt och tillfredsställande sexliv. Samtalen sker i trygghet, utan fördomar och med respekt för din identitet.',
+
+      // Prices
+      'prices.label': 'Priser',
+      'prices.title': 'Priser',
+      'prices.col.service': 'Tjänst',
+      'prices.col.time': 'Tid',
+      'prices.col.price': 'Pris',
+      'prices.row1.name': 'Individuell terapi / konsultation',
+      'prices.row2.name': 'Parterapi',
+      'prices.row3.name': 'Familjeterapi',
+      'prices.row4.name': 'Sexologisk rådgivning',
+      'prices.row5.name': 'Studentpris',
+      'prices.cancellation': 'Avbokning ska ske senast 24 timmar före bokad tid. Vid sen avbokning debiteras full kostnad.',
+
+      // FAQ
+      'faq.label': 'Vanliga frågor',
+      'faq.title': 'Frågor & svar',
+      'faq.q1': 'Vad kostar det att gå till psykolog i Malmö?',
+      'faq.a1': 'Individuell terapi kostar 1 250 kr per 60-minuterssession. Parterapi och familjeterapi kostar 1 550 kr per 75-minuterssession. Studenter erbjuds ett reducerat pris på 450 kr per session.',
+      'faq.q2': 'Vad gör en sexolog?',
+      'faq.a2': 'En sexolog hjälper personer och par med frågor kring sexualitet, lust, intimitet, identitet och relationer. Det kan handla om bristande sexuell lust, osäkerhet kring sexualitet, kommunikation om gränser, eller sexuella utmaningar kopplade till ADHD eller autism.',
+      'faq.q3': 'Behöver man remiss för att gå till psykolog?',
+      'faq.a3': 'Nej, du behöver ingen remiss för att boka tid hos en privatpraktiserande psykolog. Du kan kontakta mottagningen direkt via telefon, e-post eller kontaktformuläret här på hemsidan.',
+      'faq.q4': 'Hur fungerar parterapi?',
+      'faq.a4': 'I parterapi träffas ni som par tillsammans med terapeuten för att arbeta med kommunikation, konflikter, intimitet eller andra relationsutmaningar. Sessionerna är 75 minuter och anpassas efter era behov och mål.',
+      'faq.q5': 'Kan man gå till psykolog för ADHD?',
+      'faq.a5': 'Ja, Mandeep har över 10 års erfarenhet av neuropsykiatriska utmaningar som ADHD och autism. Stödet inkluderar känsloreglering, struktur i vardagen, arbetsrelaterade svårigheter och föräldrastöd vid NPF.',
+      'faq.q6': 'Vad är skillnaden mellan psykolog och psykoterapeut?',
+      'faq.a6': 'En psykolog har en akademisk examen i psykologi medan en psykoterapeut har en specifik psykoterapiutbildning. Mandeep har en master i psykologi samt utbildning som familjeterapeut och sexolog.',
+      'faq.q7': 'Erbjuder ni studentpris för terapi?',
+      'faq.a7': 'Ja, studenter erbjuds ett reducerat pris på 450 kr per 60-minuterssession, jämfört med ordinarie pris på 1 250 kr.',
+      'faq.q8': 'Hur lång tid tar en terapisession?',
+      'faq.a8': 'Individuell terapi och sexologisk rådgivning är 60 minuter. Parterapi och familjeterapi är 75 minuter. Hur många sessioner som behövs varierar beroende på dina behov och mål.',
+
+      // Contact
+      'contact.label': 'Kontakt',
+      'contact.title': 'Kontakt',
+      'contact.subtitle': 'Välkommen att höra av dig för att boka tid eller ställa frågor',
+      'contact.address.label': 'Adress',
+      'contact.email.label': 'E-post',
+      'contact.phone.label': 'Telefon',
+      'contact.form.name': 'Namn',
+      'contact.form.name_placeholder': 'Ditt namn',
+      'contact.form.email': 'E-post',
+      'contact.form.email_placeholder': 'din@epost.se',
+      'contact.form.message': 'Meddelande',
+      'contact.form.message_placeholder': 'Beskriv kort vad du söker hjälp med...',
+      'contact.form.submit': 'Skicka meddelande',
+
+      // Footer
+      'footer.copy': '\u00a9 2026 Mandeep Levlin Singh \u2014 Master i psykologi och familjeterapeut',
+      'footer.privacy': 'Integritetspolicy',
+    },
+
+    da: {
+      // Meta
+      'meta.title': 'Psykolog & Sexolog i Malmø – Mandeep Levlin Singh',
+      'meta.description': 'Psykolog i Malmø med fokus på ADHD, angst, parterapi og sexologisk rådgivning. Individuel terapi, familieterapi og studentpris. Book tid i dag.',
+
+      // Nav
+      'nav.about': 'Om mig',
+      'nav.services': 'Ydelser',
+      'nav.prices': 'Priser',
+      'nav.contact': 'Kontakt',
+
+      // Hero
+      'hero.subtitle': 'Psykolog \u00b7 Sexolog \u00b7 Familieterapeut',
+      'hero.title': 'Psykologisk og sexologisk behandling i Malmø',
+      'hero.tagline': 'Sammen skaber vi forandring',
+      'hero.description': 'Jeg tilbyder behandling til unge, voksne, par og familier, der søger professionel støtte til psykisk sundhed, relationer og seksuel trivsel.',
+      'hero.cta': 'Book tid',
+      'hero.scroll': 'Scroll',
+
+      // About
+      'about.label': 'Om mig',
+      'about.title': 'Psykolog i Malmø',
+      'about.p1': 'Jeg er uddannet cand. mag. i psykologi og familieterapeut fra Danmark samt under uddannelse som sexolog og parterapeut. Med over 10 års erfaring inden for neuropsykiatri, relationsarbejde og psykisk sundhed arbejder jeg evidensbaseret og helhedsorienteret.',
+      'about.p2': 'Behandlingen tilpasses altid individuelt ud fra dine behov, din livssituation og dine mål. I min private praksis i Malmø mødes du af tryghed, respekt og et tydeligt fokus på varig forandring.',
+      'about.p3': 'Mit mål er at støtte dig i at opnå bedre psykisk trivsel og holdbare relationer, både til dig selv og til andre.',
+      'about.welcome': 'Velkommen til at tage det første skridt mod forandring.',
+
+      // Services
+      'services.label': 'Ydelser',
+      'services.npf.title': 'Neuropsykiatri & ADHD',
+      'services.npf.desc': 'Har du brug for støtte ved ADHD, autisme (AST) eller angst? Jeg tilbyder individuelt tilpasset støtte og behandling med lang erfaring inden for neuropsykiatri i Malmø.',
+      'services.npf.item1': 'ADHD hos unge og voksne',
+      'services.npf.item2': 'Autisme/AST og sociale vanskeligheder',
+      'services.npf.item3': 'Følelsesregulering og stress',
+      'services.npf.item4': 'Skole- og arbejdsrelaterede vanskeligheder',
+      'services.npf.item5': 'Struktur og planlægning i hverdagen',
+      'services.npf.item6': 'Forældrestøtte og familiestøtte ved NPF',
+      'services.individual.title': 'Individuel terapi',
+      'services.individual.desc': 'Jeg tilbyder individuel terapi for voksne, der oplever psykiske, følelsesmæssige eller relationelle udfordringer.',
+      'services.individual.item1': 'Angst, indre uro og stressreaktioner',
+      'services.individual.item2': 'Lavt selvværd og usikkerhed',
+      'services.individual.item3': 'Relations- og sociale udfordringer',
+      'services.individual.item4': 'Identitet, livsvalg og personlige grænser',
+      'services.couples.title': 'Parterapi & sexologisk rådgivning',
+      'services.couples.desc': 'Jeg tilbyder parterapi og individuel sexologisk rådgivning i Malmø for personer og par, der oplever udfordringer omkring seksualitet, intimitet, identitet og relationer.',
+      'services.couples.item1': 'Manglende eller forskellig seksuel lyst',
+      'services.couples.item2': 'Usikkerhed, skam eller ubehag omkring seksualitet',
+      'services.couples.item3': 'Kommunikation om grænser og samtykke',
+      'services.couples.item4': 'Seksualitet koblet til ADHD/autisme',
+      'services.couples.item5': 'Støtte til LGBTQ+-personer',
+      'services.couples.item6': 'Identitet, seksualitet og relationer',
+
+      // Quote
+      'quote.text': 'Alles seksualitet \u2014 uden tabu.',
+      'quote.desc': 'En sexolog er en professionel, der hjælper mennesker med at håndtere seksuelle udfordringer og skabe et sundt og tilfredsstillende sexliv. Samtalerne foregår i tryghed, uden fordomme og med respekt for din identitet.',
+
+      // Prices
+      'prices.label': 'Priser',
+      'prices.title': 'Priser',
+      'prices.col.service': 'Ydelse',
+      'prices.col.time': 'Tid',
+      'prices.col.price': 'Pris',
+      'prices.row1.name': 'Individuel terapi / konsultation',
+      'prices.row2.name': 'Parterapi',
+      'prices.row3.name': 'Familieterapi',
+      'prices.row4.name': 'Sexologisk rådgivning',
+      'prices.row5.name': 'Studentpris',
+      'prices.cancellation': 'Afbestilling skal ske senest 24 timer før den bookede tid. Ved sen afbestilling opkræves fuld pris.',
+
+      // FAQ
+      'faq.label': 'Ofte stillede spørgsmål',
+      'faq.title': 'Spørgsmål & svar',
+      'faq.q1': 'Hvad koster det at gå til psykolog i Malmø?',
+      'faq.a1': 'Individuel terapi koster 1 250 kr per 60-minutters session. Parterapi og familieterapi koster 1 550 kr per 75-minutters session. Studerende tilbydes en reduceret pris på 450 kr per session.',
+      'faq.q2': 'Hvad laver en sexolog?',
+      'faq.a2': 'En sexolog hjælper personer og par med spørgsmål omkring seksualitet, lyst, intimitet, identitet og relationer. Det kan handle om manglende seksuel lyst, usikkerhed omkring seksualitet, kommunikation om grænser eller seksuelle udfordringer koblet til ADHD eller autisme.',
+      'faq.q3': 'Skal man have en henvisning for at gå til psykolog?',
+      'faq.a3': 'Nej, du behøver ingen henvisning for at booke tid hos en privatpraktiserende psykolog. Du kan kontakte klinikken direkte via telefon, e-mail eller kontaktformularen her på hjemmesiden.',
+      'faq.q4': 'Hvordan fungerer parterapi?',
+      'faq.a4': 'I parterapi mødes I som par sammen med terapeuten for at arbejde med kommunikation, konflikter, intimitet eller andre relationsudfordringer. Sessionerne er 75 minutter og tilpasses jeres behov og mål.',
+      'faq.q5': 'Kan man gå til psykolog for ADHD?',
+      'faq.a5': 'Ja, Mandeep har over 10 års erfaring med neuropsykiatriske udfordringer som ADHD og autisme. Støtten omfatter følelsesregulering, struktur i hverdagen, arbejdsrelaterede vanskeligheder og forældrestøtte ved NPF.',
+      'faq.q6': 'Hvad er forskellen på en psykolog og en psykoterapeut?',
+      'faq.a6': 'En psykolog har en akademisk uddannelse i psykologi, mens en psykoterapeut har en specifik psykoterapiuddannelse. Mandeep har en master i psykologi samt uddannelse som familieterapeut og sexolog.',
+      'faq.q7': 'Tilbyder I studentpris for terapi?',
+      'faq.a7': 'Ja, studerende tilbydes en reduceret pris på 450 kr per 60-minutters session, sammenlignet med den ordinære pris på 1 250 kr.',
+      'faq.q8': 'Hvor lang tid tager en terapisession?',
+      'faq.a8': 'Individuel terapi og sexologisk rådgivning er 60 minutter. Parterapi og familieterapi er 75 minutter. Hvor mange sessioner der er behov for, varierer afhængigt af dine behov og mål.',
+
+      // Contact
+      'contact.label': 'Kontakt',
+      'contact.title': 'Kontakt',
+      'contact.subtitle': 'Du er velkommen til at kontakte os for at booke tid eller stille spørgsmål',
+      'contact.address.label': 'Adresse',
+      'contact.email.label': 'E-mail',
+      'contact.phone.label': 'Telefon',
+      'contact.form.name': 'Navn',
+      'contact.form.name_placeholder': 'Dit navn',
+      'contact.form.email': 'E-mail',
+      'contact.form.email_placeholder': 'din@email.dk',
+      'contact.form.message': 'Besked',
+      'contact.form.message_placeholder': 'Beskriv kort, hvad du søger hjælp med...',
+      'contact.form.submit': 'Send besked',
+
+      // Footer
+      'footer.copy': '\u00a9 2026 Mandeep Levlin Singh \u2014 Master i psykologi og familieterapeut',
+      'footer.privacy': 'Privatlivspolitik',
+    }
+  };
+
+  // ── Language switcher ──
+  var currentLang = localStorage.getItem('lang') || 'sv';
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang === 'da' ? 'da' : 'sv';
+
+    // Update meta tags
+    document.title = translations[lang]['meta.title'];
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', translations[lang]['meta.description']);
+
+    // Fade out
+    document.body.classList.add('lang-switching');
+
+    setTimeout(function() {
+      // Update all data-i18n elements
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang][key]) {
+          el.setAttribute('placeholder', translations[lang][key]);
+        }
+      });
+
+      // Update active state on language buttons
+      document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+
+      // Fade in
+      document.body.classList.remove('lang-switching');
+    }, 250);
+  }
+
+  // Bind language buttons
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      setLanguage(btn.getAttribute('data-lang'));
+    });
+  });
+
+  // Apply saved language on load (without animation)
+  if (currentLang !== 'sv') {
+    // Apply immediately without fade
+    document.documentElement.lang = 'da';
+    document.title = translations.da['meta.title'];
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', translations.da['meta.description']);
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      if (translations.da[key]) el.textContent = translations.da[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n-placeholder');
+      if (translations.da[key]) el.setAttribute('placeholder', translations.da[key]);
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === 'da');
+    });
+  }
 
   document.addEventListener('DOMContentLoaded', function() {
     'use strict';
@@ -933,12 +1281,8 @@
       });
     });
 
-    // ── Navbar: transparent → white on scroll ──
+    // ── Navbar: scrolled state (since hero is now light) ──
     var navbar = document.getElementById('navbar');
-    var navLogo = document.getElementById('nav-logo');
-    var navCta = document.getElementById('nav-cta');
-    var mobileLinks = document.querySelectorAll('.mobile-link');
-    var mobileMenuInner = document.getElementById('mobile-menu-inner');
 
     ScrollTrigger.create({
       start: 'top -80',
@@ -946,28 +1290,6 @@
         var s = self.progress > 0;
         navbar.classList.toggle('bg-white', s);
         navbar.classList.toggle('shadow-sm', s);
-        navLogo.classList.toggle('text-white', !s);
-        navLogo.classList.toggle('text-stone-900', s);
-        toggleBtn.classList.toggle('text-white', !s);
-        toggleBtn.classList.toggle('text-stone-900', s);
-        document.querySelectorAll('.nav-link').forEach(function(l) {
-          l.classList.toggle('text-white/80', !s);
-          l.classList.toggle('text-stone-500', s);
-        });
-        if (navCta) {
-          navCta.classList.toggle('border-white/40', !s);
-          navCta.classList.toggle('text-white', !s);
-          navCta.classList.toggle('border-stone-900', s);
-          navCta.classList.toggle('text-stone-900', s);
-        }
-        mobileLinks.forEach(function(l) {
-          l.classList.toggle('text-white/80', !s);
-          l.classList.toggle('text-stone-600', s);
-        });
-        if (mobileMenuInner) {
-          mobileMenuInner.classList.toggle('border-white/20', !s);
-          mobileMenuInner.classList.toggle('border-stone-200', s);
-        }
       }
     });
 
@@ -982,8 +1304,6 @@
     var FADE_Y = 30;          // Subtle vertical movement
 
     // ── Simple section reveal ──
-    // Each section fades in as one unit when it enters viewport.
-    // No stagger, no split-words, no clip-paths.
     document.querySelectorAll(
       '#om-mig > div, ' +
       '.service-text, .service-img, ' +
